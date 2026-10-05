@@ -1,0 +1,29 @@
+{
+  "validCoupons": [
+    {
+      "code": "SAVE10",
+      "discountPercent": 10,
+      "description": "10% off entire order"
+    },
+    {
+      "code": "FLASH20",
+      "discountPercent": 20,
+      "description": "20% Flash Sale discount"
+    },
+    {
+      "code": "WELCOME50",
+      "discountPercent": 50,
+      "description": "50% off new customer welcome promo"
+    }
+  ],
+  "invalidCoupons": [
+    {
+      "code": "EXPIRED2023",
+      "expectedMessage": "Coupon code is expired"
+    },
+    {
+      "code": "INVALID_CODE_XYZ",
+      "expectedMessage": "Coupon code not found"
+    }
+  ]
+}

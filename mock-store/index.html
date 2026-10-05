@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ApexStore - Premium Next-Gen E-Commerce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" data-testid="toast-notification"></div>
+
+  <!-- Navigation Bar -->
+  <header class="navbar" data-testid="main-header">
+    <div class="nav-container">
+      <div class="logo-area" onclick="navigateTo('catalog')">
+        <div class="logo-icon">⚡</div>
+        <span class="logo-text">Apex<strong>Store</strong></span>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" data-testid="search-input" placeholder="Search devices, accessories, laptops..." />
+        <button id="searchBtn" data-testid="search-btn" onclick="triggerSearch()">🔍</button>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-link" id="navCatalogBtn" onclick="navigateTo('catalog')">Shop</button>
+        <button class="nav-link" id="navLoginBtn" data-testid="nav-login-btn" onclick="navigateTo('login')">Sign In</button>
+        
+        <div id="userProfile" class="user-profile-badge hidden">
+          <span id="userProfileName" data-testid="user-greeting">Alex</span>
+          <button id="logoutBtn" data-testid="logout-btn" class="logout-pill" onclick="logoutUser()">Logout</button>
+        </div>
+
+        <button class="cart-btn" id="navCartBtn" data-testid="nav-cart-btn" onclick="navigateTo('cart')">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-text">Cart</span>
+          <span id="cartCount" class="cart-badge-count" data-testid="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    <!-- View: Catalog / Storefront -->
+    <section id="catalogView" class="view-section active">
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-content">
+          <span class="hero-tag">ENTERPRISE E-COMMERCE DEMO</span>
+          <h1 class="hero-title">High-Performance Test Automation Sandbox</h1>
+          <p class="hero-sub">Fully instrumented with data-testid selectors, REST APIs, coupon engine, dynamic cart calculations and simulated checkout.</p>
+        </div>
+      </div>
+
+      <!-- Filters & Sorting Bar -->
+      <div class="controls-bar">
+        <div class="category-tabs" id="categoryFilters">
+          <button class="category-tab active" data-category="All" data-testid="category-filter" onclick="filterCategory('All')">All Products</button>
+          <button class="category-tab" data-category="Audio" data-testid="category-filter" onclick="filterCategory('Audio')">Audio</button>
+          <button class="category-tab" data-category="Wearables" data-testid="category-filter" onclick="filterCategory('Wearables')">Wearables</button>
+          <button class="category-tab" data-category="Computers" data-testid="category-filter" onclick="filterCategory('Computers')">Computers</button>
+          <button class="category-tab" data-category="Photography" data-testid="category-filter" onclick="filterCategory('Photography')">Photography</button>
+          <button class="category-tab" data-category="Accessories" data-testid="category-filter" onclick="filterCategory('Accessories')">Accessories</button>
+        </div>
+
+        <div class="sort-wrapper">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect" data-testid="sort-select" onchange="handleSort(this.value)">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating-desc">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="product-grid" id="productGrid">
+        <!-- Injected dynamically via JS -->
+      </div>
+      <div id="noProductsAlert" class="no-products-alert hidden" data-testid="no-products-msg">
+        No products match your search criteria. Try a different keyword or category.
+      </div>
+    </section>
+
+    <!-- View: Product Details Page (PDP) -->
+    <section id="pdpView" class="view-section hidden">
+      <button class="back-btn" id="pdpBackBtn" data-testid="pdp-back-btn" onclick="navigateTo('catalog')">← Back to Catalog</button>
+      <div class="pdp-container">
+        <div class="pdp-image-box">
+          <div class="pdp-preview-card" id="pdpImage">📦</div>
+        </div>
+        <div class="pdp-info-box">
+          <span class="pdp-badge" id="pdpCategory" data-testid="pdp-category">Category</span>
+          <h1 class="pdp-title" id="pdpTitle" data-testid="pdp-title">Product Name</h1>
+          <div class="pdp-rating" id="pdpRating">⭐⭐⭐⭐⭐ (4.9 / 5)</div>
+          <div class="pdp-price" id="pdpPrice" data-testid="pdp-price">$0.00</div>
+          <p class="pdp-description" id="pdpDescription" data-testid="pdp-desc">Product description will appear here.</p>
+          
+          <div class="stock-status in-stock" id="pdpStock" data-testid="pdp-stock">✔ In Stock & Ready to Ship</div>
+          
+          <div class="pdp-action-row">
+            <div class="qty-selector">
+              <button class="qty-btn" id="pdpQtyMinus" data-testid="pdp-qty-minus" onclick="adjustPdpQty(-1)">-</button>
+              <input type="number" id="pdpQuantity" data-testid="pdp-qty-input" value="1" min="1" max="10" />
+              <button class="qty-btn" id="pdpQtyPlus" data-testid="pdp-qty-plus" onclick="adjustPdpQty(1)">+</button>
+            </div>
+            <button class="btn btn-primary" id="pdpAddToCartBtn" data-testid="pdp-add-to-cart" onclick="addCurrentPdpToCart()">Add to Cart 🛒</button>
+            <button class="btn btn-accent" id="pdpBuyNowBtn" data-testid="pdp-buy-now" onclick="buyNowPdp()">Buy Now ⚡</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Shopping Cart -->
+    <section id="cartView" class="view-section hidden">
+      <h1 class="page-title">Shopping Cart</h1>
+      <div class="cart-layout" id="cartLayout">
+        <div class="cart-items-panel">
+          <div class="cart-items-list" id="cartItemsList">
+            <!-- Rendered by JS -->
+          </div>
+          <div id="emptyCartAlert" class="empty-cart-alert hidden" data-testid="empty-cart-msg">
+            Your shopping cart is currently empty.
+            <br>
+            <button class="btn btn-secondary mt-3" data-testid="continue-shopping-btn" id="continueShoppingBtn" onclick="navigateTo('catalog')">Start Shopping</button>
+          </div>
+        </div>
+
+        <div class="order-summary-panel" id="cartSummaryPanel">
+          <h2 class="summary-title">Order Summary</h2>
+          
+          <!-- Coupon Box -->
+          <div class="coupon-box">
+            <label for="couponInput">Promo Code</label>
+            <div class="coupon-input-group">
+              <input type="text" id="couponInput" data-testid="coupon-code-input" placeholder="e.g. SAVE10, FLASH20" />
+              <button id="applyCouponBtn" data-testid="apply-coupon-btn" onclick="applyCouponCode()">Apply</button>
+            </div>
+            <div id="couponFeedback" class="coupon-feedback" data-testid="coupon-feedback"></div>
+          </div>
+
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <span id="cartSubtotal" data-testid="cart-subtotal">$0.00</span>
+          </div>
+          <div class="summary-line discount-line">
+            <span>Discount</span>
+            <span id="cartDiscount" data-testid="cart-discount">-$0.00</span>
+          </div>
+          <div class="summary-line">
+            <span>Estimated Shipping</span>
+            <span id="cartShipping" data-testid="cart-shipping">$0.00</span>
+          </div>
+          <div class="summary-line">
+            <span>Estimated Tax (8%)</span>
+            <span id="cartTax" data-testid="cart-tax">$0.00</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-line total-line">
+            <span>Total</span>
+            <span id="cartGrandTotal" data-testid="cart-grand-total">$0.00</span>
+          </div>
+
+          <button class="btn btn-primary btn-block checkout-btn" id="proceedCheckoutBtn" data-testid="proceed-checkout-btn" onclick="navigateTo('checkout')">
+            Proceed to Checkout ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Checkout -->
+    <section id="checkoutView" class="view-section hidden">
+      <h1 class="page-title">Secure Checkout</h1>
+      <div class="checkout-layout">
+        <form class="checkout-form" id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+          <!-- Shipping Section -->
+          <div class="form-card">
+            <h2 class="form-card-title">1. Shipping Information</h2>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="checkoutFirstName">First Name *</label>
+                <input type="text" id="checkoutFirstName" data-testid="checkout-firstname" name="firstName" required />
+              </div>
+              <div class="form-group">
+                <label for="checkoutLastName">Last Name *</label>
+                <input type="text" id="checkoutLastName" data-testid="checkout-lastname" name="lastName" required />
+              </div>
+              <div class="form-group full-width">
+                <label for="checkoutEmail">Email Address *</label>
+                <input type="email" id="checkoutEmail" data-testid="checkout-email" name="email" required />
+              </div>
+              <div class="form-group full-width">
+                <label for="checkoutPhone">Phone Number *</label>
+                <input type="tel" id="checkoutPhone" data-testid="checkout-phone" name="phone" required />
+              </div>
+              <div class="form-group full-width">
+                <label for="checkoutAddress">Street Address *</label>
+                <input type="text" id="checkoutAddress" data-testid="checkout-address" name="address" required />
+              </div>
+              <div class="form-group">
+                <label for="checkoutCity">City *</label>
+                <input type="text" id="checkoutCity" data-testid="checkout-city" name="city" required />
+              </div>
+              <div class="form-group">
+                <label for="checkoutState">State / Province *</label>
+                <input type="text" id="checkoutState" data-testid="checkout-state" name="state" required />
+              </div>
+              <div class="form-group">
+                <label for="checkoutZip">Zip / Postal Code *</label>
+                <input type="text" id="checkoutZip" data-testid="checkout-zip" name="zipCode" required />
+              </div>
+              <div class="form-group">
+                <label for="checkoutCountry">Country *</label>
+                <select id="checkoutCountry" data-testid="checkout-country" name="country">
+                  <option value="United States">United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="India">India</option>
+                  <option value="Germany">Germany</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Section -->
+          <div class="form-card">
+            <h2 class="form-card-title">2. Payment Method</h2>
+            <div class="payment-options">
+              <label class="payment-option-label">
+                <input type="radio" name="payMethod" id="payMethodCard" data-testid="pay-card" value="card" checked onchange="togglePaymentInputs()" />
+                <span>Credit / Debit Card</span>
+              </label>
+              <label class="payment-option-label">
+                <input type="radio" name="payMethod" id="payMethodUPI" data-testid="pay-upi" value="upi" onchange="togglePaymentInputs()" />
+                <span>UPI / Instant Pay</span>
+              </label>
+              <label class="payment-option-label">
+                <input type="radio" name="payMethod" id="payMethodCOD" data-testid="pay-cod" value="cod" onchange="togglePaymentInputs()" />
+                <span>Cash on Delivery (COD)</span>
+              </label>
+            </div>
+
+            <div id="cardFields" class="form-grid mt-3">
+              <div class="form-group full-width">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" data-testid="card-number" placeholder="4242 4242 4242 4242" />
+              </div>
+              <div class="form-group">
+                <label for="cardExpiry">Expiration Date</label>
+                <input type="text" id="cardExpiry" data-testid="card-expiry" placeholder="MM/YY" />
+              </div>
+              <div class="form-group">
+                <label for="cardCvv">Security Code (CVV)</label>
+                <input type="password" id="cardCvv" data-testid="card-cvv" placeholder="123" maxlength="4" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms and Submit -->
+          <div class="form-card">
+            <label class="terms-label">
+              <input type="checkbox" id="agreeTerms" data-testid="terms-checkbox" required checked />
+              <span>I agree to the Terms of Service and Privacy Policy</span>
+            </label>
+            <div id="checkoutFormError" class="form-error hidden" data-testid="form-error"></div>
+            <button type="submit" class="btn btn-primary btn-block place-order-btn" id="placeOrderBtn" data-testid="place-order-btn">
+              Place Order 🔒
+            </button>
+          </div>
+        </form>
+
+        <div class="checkout-summary-sidebar">
+          <h2 class="summary-title">Order Review</h2>
+          <div id="checkoutItemsPreview" class="checkout-items-preview"></div>
+          <div class="summary-divider"></div>
+          <div class="summary-line total-line">
+            <span>Total Due:</span>
+            <span id="checkoutOrderTotal" data-testid="checkout-total">$0.00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Order Confirmation -->
+    <section id="confirmationView" class="view-section hidden">
+      <div class="confirmation-card">
+        <div class="conf-icon">🎉</div>
+        <h1 class="order-success-heading" data-testid="order-success-title">Thank you for your order!</h1>
+        <p class="conf-sub">We've received your order and are preparing it for shipment.</p>
+        
+        <div class="order-id-badge">
+          Order Reference: <strong id="confirmedOrderId" data-testid="order-id">ORD-12345</strong>
+        </div>
+
+        <div class="receipt-details">
+          <div class="receipt-row">
+            <span>Customer:</span>
+            <strong id="confirmCustomerName" data-testid="confirm-customer-name">Alex Johnson</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Email:</span>
+            <strong id="confirmCustomerEmail" data-testid="confirm-customer-email">alex@example.com</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Shipping To:</span>
+            <strong id="confirmShippingAddress" data-testid="confirm-shipping-address">123 Tech Blvd, New York, NY 10001</strong>
+          </div>
+          <div class="receipt-row total-highlight">
+            <span>Total Amount Paid:</span>
+            <strong id="confirmOrderTotal" data-testid="confirm-order-total">$0.00</strong>
+          </div>
+        </div>
+
+        <div class="confirmation-actions">
+          <button class="btn btn-primary" id="confirmContinueBtn" data-testid="confirm-continue-shopping" onclick="navigateTo('catalog')">Continue Shopping</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Authentication Modal / View -->
+    <section id="loginView" class="view-section hidden">
+      <div class="auth-card">
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to your ApexStore account</p>
+
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" data-testid="login-email" name="email" placeholder="customer@apexstore.com" required />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" data-testid="login-password" name="password" placeholder="••••••••" required />
+          </div>
+
+          <div id="loginErrorMessage" class="auth-error-message hidden" data-testid="login-error"></div>
+
+          <button type="submit" class="btn btn-primary btn-block mt-3" id="loginBtn" data-testid="login-submit">Sign In</button>
+        </form>
+
+        <div class="demo-creds-hint">
+          <small>⚡ Quick Test Credentials: <code>customer@apexstore.com</code> / <code>Password123!</code></small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

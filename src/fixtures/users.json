@@ -1,0 +1,44 @@
+{
+  "validUsers": [
+    {
+      "email": "customer@apexstore.com",
+      "password": "Password123!",
+      "name": "Dewanshu",
+      "role": "customer"
+    },
+    {
+      "email": "sarah.connor@apexstore.com",
+      "password": "Password123!",
+      "name": "Sarah Connor",
+      "role": "customer"
+    }
+  ],
+  "adminUser": {
+    "email": "admin@apexstore.com",
+    "password": "AdminPass456!",
+    "name": "Dewanshu (Admin)",
+    "role": "admin"
+  },
+  "invalidUsers": [
+    {
+      "email": "nonexistent_user_999@test.com",
+      "password": "WrongPassword!",
+      "expectedError": "Invalid email or password"
+    },
+    {
+      "email": "invalid-email-format",
+      "password": "Password123!",
+      "expectedError": "Please enter a valid email address"
+    },
+    {
+      "email": "customer@apexstore.com",
+      "password": "IncorrectPassword999",
+      "expectedError": "Invalid email or password"
+    },
+    {
+      "email": "",
+      "password": "",
+      "expectedError": "Email and password are required"
+    }
+  ]
+}

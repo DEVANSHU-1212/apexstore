@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex Test Automation Control Center & Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">⚡</span>
+        <div>
+          <h2 class="brand-title">APEX<strong>QA</strong></h2>
+          <span class="brand-badge">Playwright TS Engine</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active" onclick="switchTab('overview')">
+          <span class="nav-icon">📊</span> Overview & Metrics
+        </a>
+        <a href="#runner" class="nav-item" onclick="switchTab('runner')">
+          <span class="nav-icon">▶</span> Live Test Runner
+        </a>
+        <a href="#architecture" class="nav-item" onclick="switchTab('architecture')">
+          <span class="nav-icon">🏗</span> POM Architecture
+        </a>
+        <a href="#coverage" class="nav-item" onclick="switchTab('coverage')">
+          <span class="nav-icon">🛡</span> Coverage Matrix
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="http://localhost:3000" target="_blank" class="store-launch-btn">
+          <span>🛍 Launch ApexStore Demo</span> ➔
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Dashboard Area -->
+    <main class="main-viewport">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>E-Commerce Test Automation Hub</h1>
+          <p>Enterprise Grade Page Object Model (POM) • API Testing • Data-Driven Suite</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline" onclick="openPlaywrightReport()">📑 View Playwright HTML Report</button>
+          <button class="btn btn-primary pulse-btn" onclick="triggerTestRun('all')">⚡ Run Full Test Suite</button>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <div class="content-container">
+        <!-- TAB 1: OVERVIEW -->
+        <section id="tab-overview" class="tab-pane active">
+          <!-- Metric Cards -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">TOTAL TESTS</span>
+                <span class="metric-icon">🧪</span>
+              </div>
+              <div class="metric-val" id="metricTotalTests">19</div>
+              <div class="metric-footer positive">✔ 100% Automated Coverage</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">TEST SUITES</span>
+                <span class="metric-icon">📁</span>
+              </div>
+              <div class="metric-val">6</div>
+              <div class="metric-footer">Smoke, E2E, Auth, Cart, API, SauceDemo</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">TARGET BROWSERS</span>
+                <span class="metric-icon">🌐</span>
+              </div>
+              <div class="metric-val">5</div>
+              <div class="metric-footer">Chromium, Firefox, WebKit, Mobile</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">EXECUTION SPEED</span>
+                <span class="metric-icon">⚡</span>
+              </div>
+              <div class="metric-val">~8.5s</div>
+              <div class="metric-footer positive">Parallel Multi-Worker Engine</div>
+            </div>
+          </div>
+
+          <!-- Quick Run Section -->
+          <div class="section-box mt-4">
+            <h3 class="section-title">Quick Execution Triggers</h3>
+            <div class="suite-triggers-grid">
+              <div class="suite-card" onclick="triggerTestRun('smoke')">
+                <div class="suite-card-top">
+                  <span class="suite-badge smoke">SMOKE</span>
+                  <span class="suite-count">3 Tests</span>
+                </div>
+                <h4>Smoke Sanity Suite</h4>
+                <p>Verifies storefront initial loading, product catalog rendering and header navigations.</p>
+                <button class="btn btn-sm btn-outline mt-2">Run Smoke Suite ▶</button>
+              </div>
+
+              <div class="suite-card" onclick="triggerTestRun('e2e')">
+                <div class="suite-card-top">
+                  <span class="suite-badge e2e">E2E</span>
+                  <span class="suite-count">11 Tests</span>
+                </div>
+                <h4>End-to-End Customer Flows</h4>
+                <p>Auth login/logout, search, filters, sorting, cart math, coupons, and full checkout confirmation.</p>
+                <button class="btn btn-sm btn-outline mt-2">Run E2E Suite ▶</button>
+              </div>
+
+              <div class="suite-card" onclick="triggerTestRun('api')">
+                <div class="suite-card-top">
+                  <span class="suite-badge api">API</span>
+                  <span class="suite-count">5 Tests</span>
+                </div>
+                <h4>REST API Integration</h4>
+                <p>Validates /api/products schema, coupon discounts, order calculation math and negative schemas.</p>
+                <button class="btn btn-sm btn-outline mt-2">Run API Tests ▶</button>
+              </div>
+
+              <div class="suite-card" onclick="triggerTestRun('saucedemo')">
+                <div class="suite-card-top">
+                  <span class="suite-badge live">LIVE BENCHMARK</span>
+                  <span class="suite-count">1 Test</span>
+                </div>
+                <h4>SauceDemo External Store</h4>
+                <p>Validates framework capability against live public e-commerce standard (saucedemo.com).</p>
+                <button class="btn btn-sm btn-outline mt-2">Run SauceDemo ▶</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: LIVE TEST RUNNER -->
+        <section id="tab-runner" class="tab-pane">
+          <div class="runner-controls">
+            <div class="runner-status-indicator">
+              <span class="status-dot" id="statusDot"></span>
+              <span id="statusText">Status: Idle</span>
+            </div>
+            <div class="runner-btn-group">
+              <button class="btn btn-secondary" onclick="triggerTestRun('smoke')">Run Smoke</button>
+              <button class="btn btn-secondary" onclick="triggerTestRun('e2e')">Run E2E</button>
+              <button class="btn btn-secondary" onclick="triggerTestRun('api')">Run API</button>
+              <button class="btn btn-primary" onclick="triggerTestRun('all')">Run All</button>
+            </div>
+          </div>
+
+          <!-- Console Terminal -->
+          <div class="terminal-container">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <span class="terminal-title">playwright-execution-output.log</span>
+              <button class="btn-clean" onclick="clearConsole()">Clear</button>
+            </div>
+            <pre class="terminal-body" id="consoleOutput">Waiting for test execution trigger... Click any button above to run tests.</pre>
+          </div>
+        </section>
+
+        <!-- TAB 3: ARCHITECTURE -->
+        <section id="tab-architecture" class="tab-pane">
+          <div class="section-box">
+            <h3 class="section-title">Framework Design & Page Object Model Architecture</h3>
+            <p class="section-desc">Designed according to industry SDET best practices with clean separation of concerns, DRY principles, and type-safe fixtures.</p>
+            
+            <div class="arch-diagram-card">
+              <div class="arch-node header-node">Playwright Custom Fixtures (`testBase.ts`)</div>
+              <div class="arch-flow">⬇ Injects Page Objects & API Clients</div>
+              <div class="arch-grid">
+                <div class="arch-box">
+                  <h4>📄 Page Object Layer</h4>
+                  <ul>
+                    <li><code>BasePage.ts</code> (Safe clicks, waits, screenshots)</li>
+                    <li><code>LoginPage.ts</code> (Auth, sessions, errors)</li>
+                    <li><code>CatalogPage.ts</code> (Search, filter, sorting)</li>
+                    <li><code>ProductDetailsPage.ts</code> (PDP, quantities)</li>
+                    <li><code>CartPage.ts</code> (Items, quantities, coupons)</li>
+                    <li><code>CheckoutPage.ts</code> (Addresses, card/UPI/COD)</li>
+                    <li><code>OrderConfirmationPage.ts</code> (Receipts)</li>
+                  </ul>
+                </div>
+                <div class="arch-box">
+                  <h4>🔌 REST API Layer</h4>
+                  <ul>
+                    <li><code>ApiClient.ts</code> (HTTP request wrappers)</li>
+                    <li><code>ProductApiService.ts</code> (Catalog CRUD)</li>
+                    <li><code>OrderApiService.ts</code> (Order calculations)</li>
+                  </ul>
+                </div>
+                <div class="arch-box">
+                  <h4>⚙️ Data & Utilities Layer</h4>
+                  <ul>
+                    <li><code>DataGenerator.ts</code> (Faker.js mock data)</li>
+                    <li><code>Logger.ts</code> (Formatted colored console logs)</li>
+                    <li><code>Helpers.ts</code> (Currency & discount math)</li>
+                    <li><code>fixtures/*.json</code> (Users, coupons, seed)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: COVERAGE MATRIX -->
+        <section id="tab-coverage" class="tab-pane">
+          <div class="section-box">
+            <h3 class="section-title">Test Coverage & Traceability Matrix</h3>
+            <table class="coverage-table">
+              <thead>
+                <tr>
+                  <th>Test ID</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>SMOKE-01</code></td>
+                  <td>Sanity</td>
+                  <td>Storefront loads with valid header and title</td>
+                  <td><span class="badge smoke">Smoke</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>SMOKE-02</code></td>
+                  <td>Sanity</td>
+                  <td>Initial products render into catalog grid</td>
+                  <td><span class="badge smoke">Smoke</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>AUTH-01</code></td>
+                  <td>Authentication</td>
+                  <td>Standard customer login with valid credentials</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>AUTH-02</code></td>
+                  <td>Authentication</td>
+                  <td>Error prompt on invalid password attempt</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CAT-01</code></td>
+                  <td>Catalog</td>
+                  <td>Search products by keyword and verify matches</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CAT-02</code></td>
+                  <td>Catalog</td>
+                  <td>Filter products by category tabs (Audio, Wearables)</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CAT-03</code></td>
+                  <td>Catalog</td>
+                  <td>Sort products by price ascending (Low to High)</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CART-01</code></td>
+                  <td>Cart</td>
+                  <td>Add multiple products and update badge count</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CART-02</code></td>
+                  <td>Cart</td>
+                  <td>Update item quantity and verify subtotal recalculation</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CART-04</code></td>
+                  <td>Cart</td>
+                  <td>Apply promo coupon (SAVE10) and calculate discount</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CHK-01</code></td>
+                  <td>Checkout</td>
+                  <td>Full checkout with Credit Card and verified Order ID</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>CHK-02</code></td>
+                  <td>Checkout</td>
+                  <td>Checkout using Cash on Delivery (COD) method</td>
+                  <td><span class="badge e2e">E2E</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>E2E-01</code></td>
+                  <td>Journey</td>
+                  <td>Full lifecycle: Login -> Search -> PDP -> Cart -> Coupon -> Checkout -> Receipt</td>
+                  <td><span class="badge e2e">Journey</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+                <tr>
+                  <td><code>API-01-05</code></td>
+                  <td>REST API</td>
+                  <td>CRUD endpoints, status codes, schemas and calculations</td>
+                  <td><span class="badge api">API</span></td>
+                  <td><span class="badge pass">Automated</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

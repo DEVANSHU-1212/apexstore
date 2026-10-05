@@ -1,0 +1,45 @@
+{
+  "name": "ecommerce-automation-framework",
+  "version": "1.0.0",
+  "description": "Enterprise-Grade E-Commerce End-to-End Test Automation Framework with Playwright, TypeScript, Page Object Model (POM), API Testing, Visual Testing, and Interactive Runner Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test --project=chromium",
+    "test:all-browsers": "playwright test",
+    "test:headed": "playwright test --project=chromium --headed --workers=1",
+    "test:ui": "playwright test --ui",
+    "test:smoke": "playwright test tests/smoke --project=chromium",
+    "test:e2e": "playwright test tests/e2e --project=chromium",
+    "test:api": "playwright test tests/api --project=chromium",
+    "test:visual": "playwright test tests/visual --project=chromium",
+    "test:journey": "playwright test tests/e2e/end2end-journey.spec.ts --project=chromium --headed",
+    "report": "playwright show-report",
+    "mock-store": "node mock-store/server.js",
+    "start": "node mock-store/server.js",
+    "dashboard": "node dashboard/server.js"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "testing",
+    "ecommerce",
+    "page-object-model",
+    "typescript",
+    "api-testing",
+    "visual-regression",
+    "qa-framework"
+  ],
+  "author": "Antigravity SDET Suite",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.3.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "cors": "^2.8.5"
+  }
+}
